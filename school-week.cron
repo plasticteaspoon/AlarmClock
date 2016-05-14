@@ -1,0 +1,2 @@
+45 7 * * 1,2,3,5 omxplayer /home/jessica/AlarmClock/res/Sounds/good-morning.mp3
+30 7 * * 4 omxplayer /home/jessica/AlarmClock/res/Sounds/good-morning.mp3
