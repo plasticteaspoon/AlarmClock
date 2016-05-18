@@ -1,19 +1,79 @@
 <html>
-    <body>
-        <div>
-            Hey everyone this is my home page!!!
-        </div>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+         <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        
+        <script>
+            var clockApp = angular.module("clockApp", []);
+            
+            clockApp.controller("clockController", ["$scope", "$http", function (scope, http) {
+            
+                var getCrontab = function () {
+                    http.get("/api/crontab")
+                    .then(function (response) {
+                        scope.crontab = response.data.crontab;
+                    },
+                    function (response) {
+                        alert(response);
+                    });                      
+                }
+                
+                getCrontab();
+  
+                scope.alarmOn = function () {
+                    http.post("/api/alarmOn")
+                    .then(function () {
+                        alert("School alarms are go!!!");
+                        getCrontab();
+                    },
+                    function() {
+                        alert("Oops, sorry, something went wrong. ");
+                    });
+                }
+                                
+                scope.alarmOff = function () {
+                    http.post("/api/alarmOff")
+                    .then(function () {
+                        alert("School alarms are gone!!!");
+                        getCrontab();
+                    },
+                    function() {
+                        alert("Oops, sorry, something went wrong. ");
+                    });
+                }
+            }]);
+        </script>
+        
+    </head>
+
+    <body class="container" ng-app="clockApp" ng-controller="clockController">
+        <h1>
+            Welcome to Jessica's Alarm Clock
+        </h1>
+        
+        <h3>Set the alarms</h3>
         
         <div>
-            <a href="/school-week">School alarms</a>
-        </div>
-        
-        <div>
-            <a href="/no-alarm">No alarms</a>
+            <button type="button" class="btn btn-info" ng-click="alarmOn()">Alarm on</button>
+            <button type="button" class="btn btn-info" ng-click="alarmOff()">Alarm off</button>
         </div>
 
-        <div>
-            <a href="/crontab">Current alarms set</a>
+        <h3>The current alarms - </h3>
+        
+        <pre>
+            {{crontab}}
+        </pre>
+        
         </div>
 
     </body>

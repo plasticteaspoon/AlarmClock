@@ -25,6 +25,28 @@ app.get('/crontab', function (request, response) {
     });
 });
 
+app.get('/api/myName', function (request, response) {
+    response.set('Content-Type', 'application/json');
+    response.send(JSON.stringify({ 'name' : 'Roger' }));
+});
+
+app.get('/api/crontab', function (request, response) {
+    exec('crontab -l', function (error, stdout, stderr) {
+            response.set('Content-Type', 'application/json');
+            response.send(JSON.stringify({'crontab' : stdout}));
+    });
+});
+
+app.post('/api/alarmOn', function (request, response) {
+   exec('crontab ' + __dirname + '/school-week.cron');
+   response.send();
+});
+
+app.post('/api/alarmOff', function (request, response) {
+   exec('crontab -r');
+   response.send();
+});
+
 app.listen(8080, function () {
     console.log('server started');
 });
