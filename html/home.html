@@ -51,9 +51,19 @@
                         alert("Oops, sorry, something went wrong. ");
                     });
                 }
+                
+                scope.callJess = function () {
+                    http.post("/api/callJess")
+                    .then(function () {
+                        alert("Jessica has been summoned");
+                    },
+                    function() {
+                        alert("Sorry, but we failed to summon Jessica");
+                    });
+                }
             }]);
         </script>
-        
+            
     </head>
 
     <body class="container" ng-app="clockApp" ng-controller="clockController">
@@ -68,12 +78,16 @@
             <button type="button" class="btn btn-info" ng-click="alarmOff()">Alarm off</button>
         </div>
 
-        <h3>The current alarms - </h3>
+            <h3>The current alarms - </h3>
         
-        <pre>
-            {{crontab}}
-        </pre>
+            <pre>
+                {{crontab}}
+            </pre>
         
+        </div>
+            <button type="button" class="btn btn-info" ng-click="callJess()">Call Jessica</button>
+        <div>
+            
         </div>
 
     </body>

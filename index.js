@@ -47,6 +47,11 @@ app.post('/api/alarmOff', function (request, response) {
    response.send();
 });
 
+app.post('/api/callJess', function (request, response) {
+   exec('omxplayer ' + __dirname + '/res/Sounds/rooster.mp3');
+   response.send();
+});
+
 app.listen(8080, function () {
     console.log('server started');
 });
