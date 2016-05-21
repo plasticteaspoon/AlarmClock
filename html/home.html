@@ -17,48 +17,59 @@
             var clockApp = angular.module("clockApp", []);
             
             clockApp.controller("clockController", ["$scope", "$http", function (scope, http) {
-            
+                
+                scope.message = "";
+                scope.dangerMessage = "";
+                
                 var getCrontab = function () {
                     http.get("/api/crontab")
                     .then(function (response) {
                         scope.crontab = response.data.crontab;
                     },
                     function (response) {
-                        alert(response);
+                        scope.dangerMessage = "Sorry but we failed to find the crontab";
                     });                      
+                }
+                
+                var clearMessages = function () {
+                    scope.message = "";
+                    scope.dangerMessage = "";                                        
                 }
                 
                 getCrontab();
   
                 scope.alarmOn = function () {
+                    clearMessages();
                     http.post("/api/alarmOn")
                     .then(function () {
-                        alert("School alarms are go!!!");
                         getCrontab();
+                        scope.message = "School alarms are go!!!";
                     },
                     function() {
-                        alert("Oops, sorry, something went wrong. ");
+                        scope.dangerMessage = "Oops, sorry, something went wrong.";
                     });
                 }
                                 
                 scope.alarmOff = function () {
+                    clearMessages();
                     http.post("/api/alarmOff")
                     .then(function () {
-                        alert("School alarms are gone!!!");
+                        scope.message = "School alarms are gone!!!";
                         getCrontab();
                     },
                     function() {
-                        alert("Oops, sorry, something went wrong. ");
+                        scope.dangerMessage = "Oops, sorry, something went wrong. ";
                     });
                 }
                 
                 scope.callJess = function () {
+                    clearMessages();
                     http.post("/api/callJess")
                     .then(function () {
-                        alert("Jessica has been summoned");
+                        scope.message = "Jessica has been summoned";
                     },
                     function() {
-                        alert("Sorry, but we failed to summon Jessica");
+                        scope.dangerMessage = "Sorry, but we failed to summon Jessica";
                     });
                 }
             }]);
@@ -70,6 +81,14 @@
         <h1>
             Welcome to Jessica's Alarm Clock
         </h1>
+        
+        <div class="alert alert-success" role="alert" ng-show="message">
+            {{message}}
+        </div>
+        
+        <div class="alert alert-danger" role="alert" ng-show="dangerMessage">
+            {{dangerMessage}}
+        </div>
         
         <h3>Set the alarms</h3>
         
