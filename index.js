@@ -5,7 +5,7 @@ var NeDB = require('nedb');
 var db = new NeDB({filename: __dirname + '/log.nedb', autoload: true});
 var app = express();
 
-app.use(express.static('html'));
+app.use(express.static(__dirname + '/html'));
 
 app.get('/', function (request, response) {
     response.sendFile(__dirname + '/html/home.html');
