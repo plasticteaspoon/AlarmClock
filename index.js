@@ -2,7 +2,7 @@ var exec = require('child_process').exec;
 var express = require('express');
 var NeDB = require('nedb');
 
-var db = new NeDB({filename: 'log.nedb', autoload: true});
+var db = new NeDB({filename: __dirname + '/log.nedb', autoload: true});
 var app = express();
 
 app.use(express.static('html'));
