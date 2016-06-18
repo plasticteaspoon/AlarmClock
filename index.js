@@ -1,6 +1,11 @@
 var exec = require('child_process').exec;
 var express = require('express');
+var NeDB = require('nedb');
+
+var db = new NeDB({filename: 'log.nedb', autoload: true});
 var app = express();
+
+var log = {name: 'Jessica summoned'}
 
 app.use(express.static('html'));
 
@@ -49,7 +54,29 @@ app.post('/api/alarmOff', function (request, response) {
 
 app.post('/api/callJess', function (request, response) {
    exec('omxplayer ' + __dirname + '/res/Sounds/rooster.mp3');
+   db.insert(log, function (err, log) {
+       if(!err) {
+           console.log('Log added successfully');
+       } else {
+           console.log('Log failed to be added. It is ' + err);
+   }
+});
    response.send();
+});
+
+app.get('/log.html', function (request, response) {
+    response.write('<html> <body> <h1>This is the log page!!!</h1> <div> <h2>The log entrys are:</h2> </div>');
+    
+    db.find({}, function (err, logs) {
+        console.log('found ' + logs.length + ' logs');
+    
+        logs.forEach(function (log) {
+            response.write("<div>" + log.name + "</div>");
+        });
+        
+        response.write('</body> </html>');
+        response.end();
+    });
 });
 
 app.listen(8080, function () {
