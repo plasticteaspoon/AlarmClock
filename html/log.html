@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+         <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        
+        <script>
+            var logApp = angular.module("logApp", []);
+            //var NeDB = require('nedb');
+            
+            logApp.controller("logController", ["$scope", "$http", "$window", function (scope, http, window) {
+                
+                scope.message = "";
+                scope.dangerMessage = "";              
+                
+                var clearMessages = function () {
+                    scope.message = "";
+                    scope.dangerMessage = "";                                        
+                }
+                
+                //get the logs
+                http.get('/api/getLogs')
+                .then(
+                    function (response) {
+                        scope.logs = response.data;
+                    },
+                    function (response) {
+                        scope.dangerMessage = "We are sorry but we failed to retrive the logs.";
+                    });         
+                
+                scope.back = function () {                
+                    window.location.href = '/home.html';
+                }               
+            }]);
+        </script>
+            
+    </head>
+
+    <body class="container" ng-app="logApp" ng-controller="logController">
+        <h1>
+            Here are the logs!!!
+        </h1>
+        
+        <div class="alert alert-success" role="alert" ng-show="message">
+            {{message}}
+        </div>
+        
+        <div class="alert alert-danger" role="alert" ng-show="dangerMessage">
+            {{dangerMessage}}
+        </div>
+        
+        <ul>
+            <li ng-repeat="log in logs | orderBy:'date' : true">{{log.name}} {{log.date | date : 'EEE MMM d y H:mm:ss'}}</li>
+        </ul>
+        
+         <div>
+            <button type="button" class="btn btn-info" ng-click="back()">Back</button>
+        </div>
+    </body>
+</html>

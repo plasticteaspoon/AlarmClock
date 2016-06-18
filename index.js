@@ -5,8 +5,6 @@ var NeDB = require('nedb');
 var db = new NeDB({filename: 'log.nedb', autoload: true});
 var app = express();
 
-var log = {name: 'Jessica summoned'}
-
 app.use(express.static('html'));
 
 app.get('/', function (request, response) {
@@ -53,17 +51,22 @@ app.post('/api/alarmOff', function (request, response) {
 });
 
 app.post('/api/callJess', function (request, response) {
-   exec('omxplayer ' + __dirname + '/res/Sounds/rooster.mp3');
-   db.insert(log, function (err, log) {
-       if(!err) {
-           console.log('Log added successfully');
-       } else {
-           console.log('Log failed to be added. It is ' + err);
-   }
-});
-   response.send();
+    var log = {name: 'Jessica summoned', 'date': new Date()};
+    
+    exec('omxplayer ' + __dirname + '/res/Sounds/rooster.mp3');
+    
+    db.insert(log, function (err, log) {
+        if(!err) {
+            console.log('Log added successfully');
+        } else {
+            console.log('Log failed to be added. It is ' + err);
+    }
+    });
+    
+    response.send();
 });
 
+/*
 app.get('/log.html', function (request, response) {
     response.write('<html> <body> <h1>This is the log page!!!</h1> <div> <h2>The log entrys are:</h2> </div>');
     
@@ -77,6 +80,16 @@ app.get('/log.html', function (request, response) {
         response.write('</body> </html>');
         response.end();
     });
+});
+*/
+
+app.get('/api/getLogs', function (request, response) {
+    db.find({}, function (err, logs) {
+        console.log('found ' + logs.length + ' logs');
+    
+        response.set('Content-Type', 'application/json');
+        response.send(JSON.stringify(logs));
+    }); 
 });
 
 app.listen(8080, function () {

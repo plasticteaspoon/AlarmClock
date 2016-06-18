@@ -17,7 +17,7 @@
             var clockApp = angular.module("clockApp", []);
             //var NeDB = require('nedb');
             
-            clockApp.controller("clockController", ["$scope", "$http", function (scope, http) {
+            clockApp.controller("clockController", ["$scope", "$http", "$window", function (scope, http, window) {
                 
                 scope.message = "";
                 scope.dangerMessage = "";
@@ -36,10 +36,6 @@
                     scope.message = "";
                     scope.dangerMessage = "";                                        
                 }
-                
-              //var logCalls = function () {
-                    
-              //}
                 
                 getCrontab();
   
@@ -77,6 +73,10 @@
                         scope.dangerMessage = "Sorry, but we failed to summon Jessica";
                     });
                 }
+                
+                scope.viewLogs = function () {
+                    window.location.href = '/log.html';
+                }
             }]);
         </script>
             
@@ -108,10 +108,7 @@
         
         <div>
             <button type="button" class="btn btn-info" ng-click="callJess()">Call Jessica</button>
-        </div>
-            
-        <div>
-            <a href="/log.html">View logs</a>
+            <button type="button" class="btn btn-info" ng-click="viewLogs()">View logs</button>
         </div>            
 
     </body>
