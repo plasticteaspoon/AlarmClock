@@ -50,7 +50,7 @@ app.post('/api/alarmOff', function (request, response) {
    response.send();
 });
 
-app.post('/api/callJess', function (request, response) {
+app.post('/api/callJess/come', function (request, response) {
     var log = {name: 'Jessica summoned', 'date': new Date()};
     
     exec('omxplayer ' + __dirname + '/res/Sounds/rooster.mp3');
@@ -66,22 +66,22 @@ app.post('/api/callJess', function (request, response) {
     response.send();
 });
 
-/*
-app.get('/log.html', function (request, response) {
-    response.write('<html> <body> <h1>This is the log page!!!</h1> <div> <h2>The log entrys are:</h2> </div>');
+app.post('/api/callJess/dinner', function (request, response) {
+    var log = {name: 'Jessica called for dinner', 'date': new Date()};
     
-    db.find({}, function (err, logs) {
-        console.log('found ' + logs.length + ' logs');
+    exec('omxplayer ' + __dirname + '/res/Sounds/deer.mp3');
     
-        logs.forEach(function (log) {
-            response.write("<div>" + log.name + "</div>");
-        });
-        
-        response.write('</body> </html>');
-        response.end();
+    db.insert(log, function (err, log) {
+        if(!err) {
+            console.log('Log added successfully');
+        } else {
+            console.log('Log failed to be added. It is ' + err);
+    }
     });
+    
+    response.send();
 });
-*/
+
 
 app.get('/api/getLogs', function (request, response) {
     db.find({}, function (err, logs) {

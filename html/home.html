@@ -63,14 +63,25 @@
                     });
                 }
                 
-                scope.callJess = function () {
+                scope.come = function () {
                     clearMessages();
-                    http.post("/api/callJess")
+                    http.post("/api/callJess/come")
                     .then(function () {
                         scope.message = "Jessica has been summoned";
                     },
                     function() {
                         scope.dangerMessage = "Sorry, but we failed to summon Jessica";
+                    });
+                }
+                
+                scope.dinner = function () {
+                    clearMessages();
+                    http.post("/api/callJess/dinner")
+                    .then(function () {
+                        scope.message = "Jessica has been called for dinner";
+                    },
+                    function() {
+                        scope.dangerMessage = "Sorry, but we failed to call Jessica for dinner";
                     });
                 }
                 
@@ -105,11 +116,13 @@
             <h3>The current alarms - </h3>
         
             <pre>{{crontab}}</pre>
-        
+        <h3>Call Jessica</h3>
         <div>
-            <button type="button" class="btn btn-info" ng-click="callJess()">Call Jessica</button>
+            <button type="button" class="btn btn-info" ng-click="come()">Come downstairs</button>
+            <button type="button" class="btn btn-info" ng-click="dinner()">Dinners ready</button>            
+        </div>
+        <div>            
             <button type="button" class="btn btn-info" ng-click="viewLogs()">View logs</button>
-        </div>            
-
+        </div>
     </body>
 </html>
