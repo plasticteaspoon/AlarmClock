@@ -105,24 +105,30 @@
         <div class="alert alert-danger" role="alert" ng-show="dangerMessage">
             {{dangerMessage}}
         </div>
-        
-        <h3>Set the alarms</h3>
-                        
-        <div>
-            <button type="button" class="btn btn-info" ng-click="alarmOn()">Alarm on</button>
-            <button type="button" class="btn btn-info" ng-click="alarmOff()">Alarm off</button>
-        </div>
+        <form>        
+            <h3>Set the alarms</h3>                            
+            
+            <div class="form-group">
+                <button type="button" class="btn btn-info" ng-click="alarmOn()">Alarm on</button>
+                <button type="button" class="btn btn-info" ng-click="alarmOff()">Alarm off</button>
+            </div>
+        </form>
 
-            <h3>The current alarms - </h3>
+        <h3>The current alarms - </h3>
         
-            <pre>{{crontab}}</pre>
-        <h3>Call Jessica</h3>
-        <div>
-            <button type="button" class="btn btn-info" ng-click="come()">Come downstairs</button>
-            <button type="button" class="btn btn-info" ng-click="dinner()">Dinners ready</button>            
-        </div>
-        <div>            
-            <button type="button" class="btn btn-info" ng-click="viewLogs()">View logs</button>
-        </div>
+        <pre>{{crontab}}</pre>
+            
+        <form>
+            <h3>Call Jessica</h3>
+            <div class="form-group">
+                <button type="button" class="btn btn-info" ng-click="come()">Come downstairs</button>
+                <button type="button" class="btn btn-info" ng-click="dinner()">Dinner's ready</button>            
+            </div>
+        </form>
+        <form>
+            <div class="form-group">            
+                <button type="button" class="btn btn-info" ng-click="viewLogs()">View logs</button>
+            </div>
+        </form>
     </body>
 </html>

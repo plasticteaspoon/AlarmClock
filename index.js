@@ -7,6 +7,17 @@ var app = express();
 
 app.use(express.static(__dirname + '/html'));
 
+var insertLog = function (entry) {
+    entry.date = new Date();
+    db.insert(entry, function (err) {
+        if(!err) {
+            console.log('Log added successfully');
+        } else {
+            console.log('Log failed to be added. It is ' + err);
+        }
+    });
+}
+
 app.get('/', function (request, response) {
     response.sendFile(__dirname + '/html/home.html');
 });
@@ -51,33 +62,19 @@ app.post('/api/alarmOff', function (request, response) {
 });
 
 app.post('/api/callJess/come', function (request, response) {
-    var log = {name: 'Jessica summoned', 'date': new Date()};
     
     exec('omxplayer ' + __dirname + '/res/Sounds/rooster.mp3');
-    
-    db.insert(log, function (err, log) {
-        if(!err) {
-            console.log('Log added successfully');
-        } else {
-            console.log('Log failed to be added. It is ' + err);
-    }
-    });
+
+    insertLog({name: 'Jessica summoned'});
     
     response.send();
 });
 
 app.post('/api/callJess/dinner', function (request, response) {
-    var log = {name: 'Jessica called for dinner', 'date': new Date()};
     
-    exec('omxplayer ' + __dirname + '/res/Sounds/deer.mp3');
+    exec('omxplayer ' + __dirname + '/res/Sounds/dinner.mp3');
     
-    db.insert(log, function (err, log) {
-        if(!err) {
-            console.log('Log added successfully');
-        } else {
-            console.log('Log failed to be added. It is ' + err);
-    }
-    });
+    insertLog({name: 'Jessica called for dinner'});
     
     response.send();
 });
