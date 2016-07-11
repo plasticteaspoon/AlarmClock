@@ -83,7 +83,8 @@ app.post('/api/callJess/dinner', function (request, response) {
 
 app.post('/api/callJess/music', function (request, response) {
     
-    var omxplayer = exec('omxplayer ' + __dirname + '/res/Sounds/music.mp3');
+    omxplayer = exec('omxplayer ' + __dirname + '/res/Sounds/music.mp3');
+    console.log('omxplayer = ' + omxplayer);
     
     insertLog({name: 'Jessica called told to do music practice'});
     
