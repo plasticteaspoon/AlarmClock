@@ -79,6 +79,14 @@ app.post('/api/callJess/dinner', function (request, response) {
     response.send();
 });
 
+app.post('/api/callJess/music', function (request, response) {
+    
+    exec('omxplayer ' + __dirname + '/res/Sounds/music.mp3');
+    
+    insertLog({name: 'Jessica called told to do music practice'});
+    
+    response.send();
+});
 
 app.get('/api/getLogs', function (request, response) {
     db.find({}, function (err, logs) {

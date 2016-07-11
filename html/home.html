@@ -85,6 +85,16 @@
                     });
                 }
                 
+                scope.music = function () {
+                    clearMessages();
+                    http.post("/api/callJess/music")
+                    .then(function () {
+                        scope.message = "Jessica has been told to do her music practice";
+                    },
+                    function() {
+                        scope.dangerMessage = "Sorry, but we failed to tell Jessica to do her music practice";
+                    });
+                }
                 scope.viewLogs = function () {
                     window.location.href = '/log.html';
                 }
@@ -122,7 +132,8 @@
             <h3>Call Jessica</h3>
             <div class="form-group">
                 <button type="button" class="btn btn-info" ng-click="come()">Come downstairs</button>
-                <button type="button" class="btn btn-info" ng-click="dinner()">Dinner's ready</button>            
+                <button type="button" class="btn btn-info" ng-click="dinner()">Dinner's ready</button>
+                <button type="button" class="btn btn-info" ng-click="music()">Music practice</button>
             </div>
         </form>
         <form>
