@@ -95,6 +95,18 @@
                         scope.dangerMessage = "Sorry, but we failed to tell Jessica to do her music practice";
                     });
                 }
+                
+                scope.killOmx = function () {
+                    clearMessages();
+                    http.post("/api/killOmx")
+                    .then(function () {
+                        scope.message = "The call/alarm was ended";
+                    },
+                    function() {
+                        scope.dangerMessage = "Sorry, but we failed to end the call/alarm";
+                    });
+                }
+                
                 scope.viewLogs = function () {
                     window.location.href = '/log.html';
                 }
@@ -140,6 +152,11 @@
             <div class="form-group">            
                 <button type="button" class="btn btn-info" ng-click="viewLogs()">View logs</button>
             </div>
+        </form>
+        <form>
+            <div class="form-group">
+                <button type="button" class="btn btn-info" ng-click="killOmx()">End call/alarm</button>
+            <div>
         </form>
     </body>
 </html>

@@ -5,6 +5,8 @@ var NeDB = require('nedb');
 var db = new NeDB({filename: __dirname + '/log.nedb', autoload: true});
 var app = express();
 
+var omxplayer;
+
 app.use(express.static(__dirname + '/html'));
 
 var insertLog = function (entry) {
@@ -63,7 +65,7 @@ app.post('/api/alarmOff', function (request, response) {
 
 app.post('/api/callJess/come', function (request, response) {
     
-    exec('omxplayer ' + __dirname + '/res/Sounds/rooster.mp3');
+    omxplayer = exec('omxplayer ' + __dirname + '/res/Sounds/rooster.mp3');
 
     insertLog({name: 'Jessica summoned'});
     
@@ -72,7 +74,7 @@ app.post('/api/callJess/come', function (request, response) {
 
 app.post('/api/callJess/dinner', function (request, response) {
     
-    exec('omxplayer ' + __dirname + '/res/Sounds/dinner.mp3');
+    omxplayer = exec('omxplayer ' + __dirname + '/res/Sounds/dinner.mp3');
     
     insertLog({name: 'Jessica called for dinner'});
     
@@ -81,21 +83,19 @@ app.post('/api/callJess/dinner', function (request, response) {
 
 app.post('/api/callJess/music', function (request, response) {
     
-    exec('omxplayer ' + __dirname + '/res/Sounds/music.mp3');
+    var omxplayer = exec('omxplayer ' + __dirname + '/res/Sounds/music.mp3');
     
     insertLog({name: 'Jessica called told to do music practice'});
     
     response.send();
 });
 
-app.get('/api/getLogs', function (request, response) {
-    db.find({}, function (err, logs) {
-        console.log('found ' + logs.length + ' logs');
-    
-        response.set('Content-Type', 'application/json');
-        response.send(JSON.stringify(logs));
-    }); 
+app.post('/api/killOmx', function (request, response) {
+    omxplayer.kill();
+    console.log('Omxplayer killed');
 });
+
+
 
 app.listen(8080, function () {
     console.log('server started');
