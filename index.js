@@ -20,6 +20,12 @@ var insertLog = function (entry) {
     });
 }
 
+var playSound = function (fileName, balance) {    
+    exec("amixer sset 'PCM' " +  balance, function (error, stdout, stderr) {
+        omxplayer = exec('omxplayer ' + __dirname + '/res/Sounds/' + fileName);
+    });    
+}
+
 app.get('/', function (request, response) {
     response.sendFile(__dirname + '/html/home.html');
 });
@@ -65,8 +71,8 @@ app.post('/api/alarmOff', function (request, response) {
 
 app.post('/api/callJess/come', function (request, response) {
     
-    omxplayer = exec('omxplayer ' + __dirname + '/res/Sounds/rooster.mp3');
-
+    playSound(rooster.mp3, '10%');
+    
     insertLog({name: 'Jessica summoned'});
     
     response.send();
@@ -74,7 +80,9 @@ app.post('/api/callJess/come', function (request, response) {
 
 app.post('/api/callJess/dinner', function (request, response) {
     
-    omxplayer = exec('omxplayer ' + __dirname + '/res/Sounds/dinner.mp3');
+    playSound(dinner.mp3, '50%');
+    
+    console.log('omxplayer = ' + omxplayer);
     
     insertLog({name: 'Jessica called for dinner'});
     
@@ -83,7 +91,8 @@ app.post('/api/callJess/dinner', function (request, response) {
 
 app.post('/api/callJess/music', function (request, response) {
     
-    omxplayer = exec('omxplayer ' + __dirname + '/res/Sounds/music.mp3');
+    playSound(music.mp3, '50%');
+    
     console.log('omxplayer = ' + omxplayer);
     
     insertLog({name: 'Jessica called told to do music practice'});
