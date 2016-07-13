@@ -1,6 +1,4 @@
-var exec = require('child_process').exec; 
-var express = require('express'); var NeDB = require('nedb');
-var spawn = require('child_process').spawn;
+ var exec = require('child_process').exec; var express = require('express'); var NeDB = require('nedb');
 
 var db = new NeDB({filename: __dirname + '/log.nedb', autoload: true});
 var app = express();
@@ -13,6 +11,7 @@ var insertLog = function (entry) {
     entry.date = new Date();
     db.insert(entry, function (err) {
         if(!err) {
+            console.log('Log added successfully');
         } else {
             console.log('Log failed to be added. It is ' + err);
         }
@@ -21,15 +20,7 @@ var insertLog = function (entry) {
 
 var playSound = function (fileName, balance) {    
 
-    omxplayer = spawn('omxplayer', ['--vol', balance, __dirname + '/res/Sounds/' + fileName], {shell: 'false'});
-    //omxplayer = exec('omxplayer --vol ' + balance + ' ' + __dirname + '/res/Sounds/' + fileName);
-
-    omxplayer.on('error', function(error) {
-        console.log('Failed to spawn omxplayer. ' + error);
-    });    
-    omxplayer.stderr.on('data', function(data) {
-        console.log('Omxplayer stderr returned: ' + data);
-    });
+    omxplayer = exec('omxplayer --vol '+ balance + ' ' + __dirname + '/res/Sounds/' + fileName);    
 }
 
 app.get('/', function (request, response) {
@@ -103,9 +94,8 @@ app.post('/api/callJess/music', function (request, response) {
 });
 
 app.post('/api/killOmx', function (request, response) {
-    exec("kill $(ps -o pid,command -ax | grep omxplayer.bin | grep -v grep | awk '{print $1}')");
-
-    response.send();
+    omxplayer.kill();
+    console.log('Omxplayer killed');
 });
 
 
