@@ -32,6 +32,22 @@ var playSound = function (fileName, balance) {
     });
 }
 
+setInterval(function () {
+    var month = new getMonth();
+    var day-of-month = new getDate();
+    var day-of-week = new getDay();
+    var hour = new getHours();
+    var minute = new getMinutes();
+
+    var config = 
+        {
+            'alarm1' : {
+                           dayWeek' : '0'
+                           ''
+                       }
+        };
+}, 60000);
+
 app.get('/', function (request, response) {
     response.sendFile(__dirname + '/html/home.html');
 });
