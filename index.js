@@ -9,6 +9,8 @@ var omxplayer;
 
 app.use(express.static(__dirname + '/html'));
  
+var config = 
+ 
 var insertLog = function (entry) {
     entry.date = new Date();
     db.insert(entry, function (err) {
@@ -20,32 +22,35 @@ var insertLog = function (entry) {
 }
 
 var playSound = function (fileName, balance) {    
-
-    omxplayer = spawn('omxplayer', ['--vol', balance, __dirname + '/res/Sounds/' + fileName], {shell: 'false'});
+    console.log('Ring, ring, ring!!!');
+    
+    //omxplayer = spawn('omxplayer', ['--vol', balance, __dirname + '/res/Sounds/' + fileName], {shell: 'false'});
     //omxplayer = exec('omxplayer --vol ' + balance + ' ' + __dirname + '/res/Sounds/' + fileName);
 
-    omxplayer.on('error', function(error) {
-        console.log('Failed to spawn omxplayer. ' + error);
-    });    
-    omxplayer.stderr.on('data', function(data) {
-        console.log('Omxplayer stderr returned: ' + data);
-    });
+    //omxplayer.on('error', function(error) {
+    //    console.log('Failed to spawn omxplayer. ' + error);
+    //});    
+    //omxplayer.stderr.on('data', function(data) {
+    //    console.log('Omxplayer stderr returned: ' + data);
+    //});
 }
 
 setInterval(function () {
-    var month = new getMonth();
-    var day-of-month = new getDate();
-    var day-of-week = new getDay();
-    var hour = new getHours();
-    var minute = new getMinutes();
-
-    var config = 
-        {
-            'alarm1' : {
-                           dayWeek' : '0'
-                           ''
-                       }
-        };
+    console.log('checking the date...');
+    
+    var now = new Date();
+    var month = now.getMonth();
+    var dayOfMonth = now.getDate();
+    var dayOfWeek = now.getDay();
+    var hour = now.getHours();
+    var minute = now.getMinutes();
+    
+    if(dayOfWeek == config.alarm1.dayOfWeek & hour == config.alarm1.hour & minute == config.alarm1.minute) {
+        playSound('rooster.mp3', '-850');
+        console.log('Alarm has rung');
+    }else {
+        console.log('Aalrm has not rung');
+    }
 }, 60000);
 
 app.get('/', function (request, response) {
