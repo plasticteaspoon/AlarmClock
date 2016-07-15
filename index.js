@@ -6,13 +6,17 @@ var fs = require('fs');
 
 var config;
 
-fs.readFile(__dirname + '/alarmClock.config', 'utf8', 
-    function (err, data) {
-        if(err) throw err;
-        
-        config = JSON.parse(data);
-    }
-);
+var readConfig = function () { 
+    fs.readFile(__dirname + '/alarmClock.config', 'utf8', 
+        function (err, data) {
+            if(err) throw err;
+            
+            config = JSON.parse(data);
+        }
+    );
+}
+
+readConfig();
 
 var db = new NeDB({filename: __dirname + '/log.nedb', autoload: true});
 var app = express();
@@ -114,6 +118,13 @@ app.post('/api/callJess/music', function (request, response) {
 app.post('/api/killOmx', function (request, response) {
     exec("kill $(ps -o pid,command -ax | grep omxplayer.bin | grep -v grep | awk '{print $1}')");
 
+    response.send();
+});
+
+app.post('/api/refreshConfig', function (request, response) {
+    readConfig();
+    console.log('read config');
+    
     response.send();
 });
 

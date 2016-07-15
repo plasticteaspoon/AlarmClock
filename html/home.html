@@ -106,6 +106,17 @@
                         scope.dangerMessage = "Sorry, but we failed to end the call/alarm";
                     });
                 }
+                                
+                scope.refreshConfig = function () {
+                    clearMessages();
+                    http.post("/api/refreshConfig")
+                    .then(function () {
+                        scope.message = "The config was refreshed";
+                    },
+                    function() {
+                        scope.dangerMessage = "Sorry, but we failed to refresh the config";
+                    });
+                }
                 
                 scope.viewLogs = function () {
                     window.location.href = '/log.html';
@@ -149,14 +160,19 @@
             </div>
         </form>
         <form>
+            <div class="form-group">
+                <button type="button" class="btn btn-info" ng-click="killOmx()">End call/alarm</button>
+            <div>
+        </form>
+        <form>
             <div class="form-group">            
                 <button type="button" class="btn btn-info" ng-click="viewLogs()">View logs</button>
             </div>
         </form>
         <form>
             <div class="form-group">
-                <button type="button" class="btn btn-info" ng-click="killOmx()">End call/alarm</button>
-            <div>
+                <button type="button" class="btn btn-info" ng-click="refreshConfig()">Refresh config</button>
+            </div>
         </form>
     </body>
 </html>
