@@ -1,16 +1,26 @@
 var exec = require('child_process').exec; 
-var express = require('express'); var NeDB = require('nedb');
+var express = require('express'); 
+var NeDB = require('nedb');
 var spawn = require('child_process').spawn;
+var fs = require('fs');
+
+var config;
+
+fs.readFile(__dirname + '/alarmClock.config', 'utf8', 
+    function (err, data) {
+        if(err) throw err;
+        
+        config = JSON.parse(data);
+    }
+);
 
 var db = new NeDB({filename: __dirname + '/log.nedb', autoload: true});
 var app = express();
 
 var omxplayer;
 
-app.use(express.static(__dirname + '/html'));
- 
-var config = 
- 
+app.use(express.static(__dirname + '/html')); 
+
 var insertLog = function (entry) {
     entry.date = new Date();
     db.insert(entry, function (err) {
@@ -24,15 +34,15 @@ var insertLog = function (entry) {
 var playSound = function (fileName, balance) {    
     console.log('Ring, ring, ring!!!');
     
-    //omxplayer = spawn('omxplayer', ['--vol', balance, __dirname + '/res/Sounds/' + fileName], {shell: 'false'});
-    //omxplayer = exec('omxplayer --vol ' + balance + ' ' + __dirname + '/res/Sounds/' + fileName);
+    omxplayer = spawn('omxplayer', ['--vol', balance, __dirname + '/res/Sounds/' + fileName], {shell: 'false'});
+    omxplayer = exec('omxplayer --vol ' + balance + ' ' + __dirname + '/res/Sounds/' + fileName);
 
-    //omxplayer.on('error', function(error) {
-    //    console.log('Failed to spawn omxplayer. ' + error);
-    //});    
-    //omxplayer.stderr.on('data', function(data) {
-    //    console.log('Omxplayer stderr returned: ' + data);
-    //});
+    omxplayer.on('error', function(error) {
+        console.log('Failed to spawn omxplayer. ' + error);
+    });    
+    omxplayer.stderr.on('data', function(data) {
+        console.log('Omxplayer stderr returned: ' + data);
+    });
 }
 
 setInterval(function () {
