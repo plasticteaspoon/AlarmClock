@@ -36,10 +36,10 @@ var insertLog = function (entry) {
 }
 
 var playSound = function (fileName, balance) {    
-    console.log('Ring, ring, ring!!!');
-    
+        
+    console.log("Playing " + fileName);
     omxplayer = spawn('omxplayer', ['--vol', balance, __dirname + '/res/Sounds/' + fileName], {shell: 'false'});
-    omxplayer = exec('omxplayer --vol ' + balance + ' ' + __dirname + '/res/Sounds/' + fileName);
+    //omxplayer = exec('omxplayer --vol ' + balance + ' ' + __dirname + '/res/Sounds/' + fileName);
 
     omxplayer.on('error', function(error) {
         console.log('Failed to spawn omxplayer. ' + error);
@@ -112,6 +112,15 @@ app.post('/api/callJess/music', function (request, response) {
     
     insertLog({name: 'Jessica called told to do music practice'});
     
+    response.send();
+});
+
+app.get('/api/alarm-random', function (request, response) {
+    fs.readdir(__dirname + '/res/Sounds/Alarms', function (err, files) {
+        var arrayNumber = Math.floor(Math.random() * files.length);
+        playSound('Alarms/' + files[arrayNumber], '1000');
+    });
+
     response.send();
 });
 
