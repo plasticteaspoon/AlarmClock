@@ -38,8 +38,8 @@ var insertLog = function (entry) {
 var playSound = function (fileName, balance) {    
         
     console.log("Playing " + fileName);
-    omxplayer = spawn('omxplayer', ['--vol', balance, __dirname + '/res/Sounds/' + fileName], {shell: 'false'});
-    //omxplayer = exec('omxplayer --vol ' + balance + ' ' + __dirname + '/res/Sounds/' + fileName);
+    //omxplayer = spawn('omxplayer', ['--vol', balance, __dirname + '/res/Sounds/' + fileName], {shell: 'false'});
+    omxplayer = exec('omxplayer --vol ' + balance + ' ' + __dirname + '/res/Sounds/' + fileName);
 
     omxplayer.on('error', function(error) {
         console.log('Failed to spawn omxplayer. ' + error);
@@ -50,7 +50,7 @@ var playSound = function (fileName, balance) {
 }
 
 setInterval(function () {
-    console.log('checking the date...');
+    //console.log('checking the date...');
     
     var now = new Date();
     var month = now.getMonth();
@@ -61,9 +61,9 @@ setInterval(function () {
     
     if(dayOfWeek == config.alarm1.dayOfWeek & hour == config.alarm1.hour & minute == config.alarm1.minute) {
         playSound('rooster.mp3', '-850');
-        console.log('Alarm has rung');
+        //console.log('Alarm has rung');
     }else {
-        console.log('Aalrm has not rung');
+        //console.log('Aalrm has not rung');
     }
 }, 60000);
 
@@ -118,7 +118,7 @@ app.post('/api/callJess/music', function (request, response) {
 app.get('/api/alarm-random', function (request, response) {
     fs.readdir(__dirname + '/res/Sounds/Alarms', function (err, files) {
         var arrayNumber = Math.floor(Math.random() * files.length);
-        playSound('Alarms/' + files[arrayNumber], '1000');
+        playSound('Alarms/' + files[arrayNumber], '0');
     });
 
     response.send();
