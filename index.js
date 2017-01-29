@@ -4,20 +4,6 @@ var NeDB = require('nedb');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 
-var config;
-
-var readConfig = function () { 
-    fs.readFile(__dirname + '/alarmClock.config', 'utf8', 
-        function (err, data) {
-            if(err) throw err;
-            
-            config = JSON.parse(data);
-        }
-    );
-}
-
-readConfig();
-
 var db = new NeDB({filename: __dirname + '/log.nedb', autoload: true});
 var app = express();
 
@@ -48,24 +34,6 @@ var playSound = function (fileName, balance) {
         console.log('Omxplayer stderr returned: ' + data);
     });
 }
-
-setInterval(function () {
-    //console.log('checking the date...');
-    
-    var now = new Date();
-    var month = now.getMonth();
-    var dayOfMonth = now.getDate();
-    var dayOfWeek = now.getDay();
-    var hour = now.getHours();
-    var minute = now.getMinutes();
-    
-    if(dayOfWeek == config.alarm1.dayOfWeek & hour == config.alarm1.hour & minute == config.alarm1.minute) {
-        playSound('rooster.mp3', '-850');
-        //console.log('Alarm has rung');
-    }else {
-        //console.log('Aalrm has not rung');
-    }
-}, 60000);
 
 app.get('/', function (request, response) {
     response.sendFile(__dirname + '/html/home.html');
@@ -142,6 +110,12 @@ app.get('/api/getLogs', function (request, response) {
         response.set('Content-Type', 'application/json');
         response.send(JSON.stringify(data));
     });
+});
+
+app.get('/api/getDate', function (request, response) {
+    var date = new Date();
+    response.set('Content-Type', 'application/json');
+    response.send(JSON.stringify(date));
 });
 
 app.listen(8080, function () {

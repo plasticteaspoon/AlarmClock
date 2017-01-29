@@ -121,6 +121,15 @@
                 scope.viewLogs = function () {
                     window.location.href = '/log.html';
                 }
+
+                var getDate = function () {
+                    http.get("/api/getDate")
+                    .then(function (response) {
+                        scope.date = response.data;
+                    });
+                };
+
+                getDate();
             }]);
         </script>
             
@@ -138,6 +147,11 @@
         <div class="alert alert-danger" role="alert" ng-show="dangerMessage">
             {{dangerMessage}}
         </div>
+
+        <div>
+            <h2>The time is : {{date | date : 'h:mm a'}}</h2>
+        </div>
+    
         <form>        
             <h3>Set the alarms</h3>                            
             
